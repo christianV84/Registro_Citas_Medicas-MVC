@@ -1,0 +1,33 @@
+﻿@model Clinica_UPN_V4._3.Models.Login
+
+<form method="post" asp-action="Login" asp-controller="Cuenta">
+    <h1 class="h3 mb-3 text-center mt-3">Inicio de sesion</h1>
+
+    <div class="text-center">
+        <div class="row m-md-5">
+            <div class="col-xs-6 col-sm-4 mb-0 text-center">
+                <img src="https://img.freepik.com/vector-gratis/cruz-medica-vector-diseno-logotipo-hospital_53876-136743.jpg?size=338&ext=jpg&ga=GA1.1.1826414947.1698796800&semt=ais"
+                     class="img-fluid" />
+            </div>
+
+            <div class="col-xs-6 col-sm-4 card pt-4">
+                <div class="form-floating">
+                    <input type="text" class="form-control" required asp-for="UsuarioAdmin" />
+                    <label for="floatingInput">UserName</label>
+                </div>
+                <br />
+                <div class="form-floating">
+                    <input type="password" class="form-control" required asp-for="Contraseña" />
+                    <label for="floatingPassword">Clave</label>
+                </div>
+                <br />
+                <button type="submit" class="btn-lg btn-secondary">Ingresar</button>
+                <label class="alert-danger">@ViewBag.Error</label>
+            </div>
+
+        </div>
+
+    </div>
+
+    
+</form>

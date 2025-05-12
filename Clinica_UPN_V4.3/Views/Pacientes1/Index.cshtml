@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Clinica_UPN_V4._3.Paciente>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Lista de Pacientes</h1>
+
+<p>
+    <!-- <a asp-action="Create" class="btn btn-info">Registrar Nuevo Paciente</a>-->
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr class="table-dark">
+            <th>
+                <span @Html.DisplayNameFor(model => model.Dni)>DNI</span>
+            </th>
+            <th>
+                <span @Html.DisplayNameFor(model => model.Apellidos)>Apellidos</span>
+            </th>
+            <th>
+                <span @Html.DisplayNameFor(model => model.Nombres)>Nombres</span>
+            </th>
+            <th>
+                <span @Html.DisplayNameFor(model => model.FechaNacimiento)>Fecha Nacimiento</span>
+            </th>
+            <th>
+                <span @Html.DisplayNameFor(model => model.Telefono)>Teléfono</span>
+            </th>
+            <th>
+                <span @Html.DisplayNameFor(model => model.UsuarioPac)>Usuario</span>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dni)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellidos)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombres)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaNacimiento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Telefono)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UsuarioPac)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.UsuarioPac" class="btn btn-primary">Editar</a> | 
+                    <a asp-action="Details" asp-route-id="@item.UsuarioPac" class="btn btn-warning">Ver Detalles</a> |
+                    <a asp-action="Delete" asp-route-id="@item.UsuarioPac" class="btn btn-danger">Eliminar</a> 
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

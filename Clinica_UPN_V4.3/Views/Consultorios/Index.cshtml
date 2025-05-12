@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Clinica_UPN_V4._3.Consultorio>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Lista de Consultorios</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-info">Registrar Nuevo Consultorio</a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr class="table-dark">
+            <th>
+                <span @Html.DisplayNameFor(model => model.NumConsultorio)>N° Consultorio</span>
+            </th>
+            <th>
+                <span @Html.DisplayNameFor(model => model.EspConsultorio)>Especialización del Consultorio</span>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumConsultorio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EspConsultorio)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.NumConsultorio" class="btn btn-primary">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.NumConsultorio" class="btn btn-warning">Ver Detalles</a> |
+                    <a asp-action="Delete" asp-route-id="@item.NumConsultorio" class="btn btn-danger">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

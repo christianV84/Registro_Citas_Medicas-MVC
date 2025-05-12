@@ -1,0 +1,214 @@
+﻿@model Clinica_UPN_V4._3.Citum
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Registrar Nueva Cita</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NumConsultorio" class="control-label ">Especialización del Consultorio</label>
+                <select asp-for="NumConsultorio" class="form-control mt-2" asp-items="ViewBag.NumConsultorio"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="UsuarioMedico" class="control-label mt-3">Datos del Médico</label>
+                <select asp-for="UsuarioMedico" class="form-control mt-2" asp-items="ViewBag.UsuarioMedico"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="UsuarioPaciente" class="control-label mt-3">Datos del Paciente</label>
+                <select asp-for="UsuarioPaciente" class="form-control mt-2" asp-items="ViewBag.UsuarioPaciente"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaSoloFecha" class="control-label mt-3">Fecha</label>
+                <input asp-for="FechaSoloFecha" class="form-control mt-2" type="date" id="fechaSoloFecha"
+                       min="@DateTime.Now.ToString("yyyy-MM-dd")"
+                       max="2024-12-31" />
+                <span asp-validation-for="FechaSoloFecha" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaSoloHora" class="control-label mt-3">Hora</label>
+                <select asp-for="FechaSoloHora" class="form-control mt-2" id="fechaSoloHora">
+                    <option value="">Seleccione una opción</option>
+                </select>
+                <span asp-validation-for="FechaSoloHora" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary mt-3" />
+            </div>
+        </form>
+    </div>
+</div>
+<hr />
+<div>
+    <a asp-action="Index" class="btn btn-success">Regresar a la lista</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+
+        document.getElementById('NumConsultorio').addEventListener('change', function () {
+            var consultorioId = this.value;
+
+
+            var url = '@Url.Action("Create", "Citums")?consultorioId=' + consultorioId;
+
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    var parser = new DOMParser();
+                    var newDocument = parser.parseFromString(html, 'text/html');
+
+                    var newMedicosSelect = newDocument.getElementById('UsuarioMedico');
+                    var medicosSelect = document.getElementById('UsuarioMedico');
+
+                    
+                    medicosSelect.innerHTML = newMedicosSelect.innerHTML;
+                });
+
+            
+            var indexUrl = '@Url.Action("Index", "Home")'; 
+
+            fetch(indexUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '@Html.AntiForgeryToken()' 
+                },
+                body: JSON.stringify({ consultorioId: consultorioId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Datos enviados al index:', data);
+                    
+                })
+                .catch(error => {
+                    console.error('Error al enviar los datos al index:', error);
+                });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dateInput = document.getElementById('fechaSoloFecha');
+
+            dateInput.addEventListener('change', function () {
+                const selectedDate = new Date(this.value);
+
+                if (selectedDate.getDay() === 6) {
+                    showCustomAlert('No se permite seleccionar domingos', 'info');
+                    this.value = '';
+                }
+            });
+
+            dateInput.addEventListener('focus', function () {
+                const minDate = new Date(dateInput.getAttribute('min'));
+                const maxDate = new Date(dateInput.getAttribute('max'));
+                let currentDate = new Date(minDate);
+                const disabledDates = [];
+
+                while (currentDate <= maxDate) {
+                    if (currentDate.getDay() === 6) {
+                        disabledDates.push(currentDate.toISOString().split('T')[0]);
+                    }
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+
+                const disabledPattern = disabledDates.join('|');
+                dateInput.setAttribute('pattern', `^(?!(${disabledPattern})).*$`);
+            });
+
+            function showCustomAlert(message, type) {
+                const alertContainer = document.createElement('div');
+                alertContainer.className = `custom-alert alert alert-${type}`;
+                alertContainer.textContent = message;
+                document.body.appendChild(alertContainer);
+
+                setTimeout(function () {
+                    alertContainer.style.opacity = '0';
+                    setTimeout(function () {
+                        document.body.removeChild(alertContainer);
+                    }, 600);
+                }, 3000);
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dateInput = document.getElementById('fechaSoloFecha');
+            const medicoSelect = document.getElementById('UsuarioMedico');
+            const horaSelect = document.getElementById('fechaSoloHora');
+
+            function updateAvailableHours() {
+                const selectedMedico = medicoSelect.value;
+                const selectedDate = dateInput.value;
+
+                if (selectedMedico && selectedDate) {
+                    fetch(`@Url.Action("GetAvailableHours", "Citums")?usuarioMed=${selectedMedico}&fecha=${selectedDate}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            horaSelect.innerHTML = '<option value="">Seleccione una opción</option>';
+                            data.forEach(hora => {
+                                let option = document.createElement('option');
+                                option.value = hora;
+                                option.textContent = hora;
+                                horaSelect.appendChild(option);
+                            });
+                        });
+                }
+            }
+
+            medicoSelect.addEventListener('change', updateAvailableHours);
+            dateInput.addEventListener('change', updateAvailableHours);
+        });
+    </script>
+
+    <style>
+        .custom-alert {
+            position: fixed;
+            top: 270px;
+            left: 50%;
+            font-size: 25px;
+            transform: translateX(-50%);
+            z-index: 1000;
+            padding: 10px;
+            border-radius: 5px;
+            color: #FFFFFF;
+            background-color: #FF0000;
+            border: 1px solid #bce8f1;
+            opacity: 1;
+            transition: opacity 0.6s ease-in-out;
+        }
+    </style>
+
+    <!--
+    <script>
+        document.getElementById('fecha').addEventListener('input', function () {
+            const date = new Date(this.value);
+            if (date.getDay() === 0) {
+                alert('No se permite seleccionar domingos.');
+                this.value = '';
+            }
+        });
+    </script>
+
+    <script>
+        document.getElementById('fecha').addEventListener('change', function () {
+            var selectedDateTime = new Date(this.value);
+            var selectedHour = selectedDateTime.getHours();
+            var selectedMinute = selectedDateTime.getMinutes();
+
+            if (selectedMinute % 20 !== 0) {
+                alert("Seleccione una hora válida con un rango de 20 minutos (00, 20, 40).");
+                this.value = '';
+            }
+        });
+    </script>
+    -->
+}

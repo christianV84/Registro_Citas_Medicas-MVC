@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Clinica_UPN_V4._3.Citum>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Lista de Citas</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-info">Registrar Nueva Cita</a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr class="table-dark">
+            <th>
+                @Html.DisplayNameFor(model => model.NumCita)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaSoloFecha)
+                -
+                @Html.DisplayNameFor(model => model.FechaSoloHora)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumConsultorioNavigation.NumConsultorio)
+                -
+                @Html.DisplayNameFor(model => model.NumConsultorioNavigation.EspConsultorio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UsuarioMedicoNavigation.NombreCompletoMedico)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UsuarioPacienteNavigation.NombreCompleto)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumCita)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaSoloFecha)
+                    -
+                    @Html.DisplayFor(modelItem => item.FechaSoloHora)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumConsultorioNavigation.NumConsultorio)
+                    -
+                    @Html.DisplayFor(modelItem => item.NumConsultorioNavigation.EspConsultorio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UsuarioMedicoNavigation.NombreCompletoMedico)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UsuarioPacienteNavigation.NombreCompleto)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.NumCita" class="btn btn-warning">Ver Detalles</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

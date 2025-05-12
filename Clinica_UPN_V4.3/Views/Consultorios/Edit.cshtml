@@ -1,0 +1,50 @@
+﻿@model Clinica_UPN_V4._3.Consultorio
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Editar este Registro</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="NumConsultorio" />
+            <div class="form-group">
+                <label asp-for="NumConsultorio" class="control-label mt-3">N° Consultorio</label>
+                <input asp-for="NumConsultorio" class="form-control mt-2" />
+                <span asp-validation-for="NumConsultorio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EspConsultorio" class="control-label mt-3">Especialización del Consultorio</label>
+                <select asp-for="EspConsultorio" class="form-control mt-2">
+                    <option value="">Seleccione una opción</option>
+                    <option value="Medicina General">Medicina General</option>
+                    <option value="Oncología">Oncología</option>
+                    <option value="Psicología">Psicología</option>
+                    <option value="Cardiología">Cardiología</option>
+                    <option value="Dermatología">Dermatología</option>
+                    <option value="Pediatría">Pediatría</option>
+                    <option value="Ginecología">Ginecología</option>
+                    <option value="Geriatría">Geriatría</option>
+                    <option value="Gastroenterología">Gastroenterología</option>
+                    <option value="Oftalmología">Oftalmología</option>
+                </select>
+                <span asp-validation-for="EspConsultorio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary mt-3" />
+            </div>
+        </form>
+    </div>
+</div>
+<hr />
+<div>
+    <a asp-action="Index" class="btn btn-success">Regresar a la lista</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

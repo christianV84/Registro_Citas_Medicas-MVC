@@ -1,0 +1,87 @@
+﻿@model Clinica_UPN_V4._3.Consultorio
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Eliminar este registro</h2>
+
+<h2>Estas seguro que deseas eliminar esto?</h2>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            <span @Html.DisplayNameFor(model => model.NumConsultorio)>N° Consultorio</span>
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NumConsultorio)
+        </dd>
+        <dt class = "col-sm-2">
+            <span @Html.DisplayNameFor(model => model.EspConsultorio)>Especialización del Consultorio</span>
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EspConsultorio)
+        </dd>
+    </dl>
+    <hr />
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="NumConsultorio" />
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-success">Regresar a la lista</a>
+    </form>
+    <br />
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div id="custom-alert" class="custom-alert alert alert-danger">
+            @Html.ValidationSummary()
+        </div>
+    }
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const customAlert = document.getElementById('custom-alert');
+
+            if (customAlert) {
+                showCustomAlert(customAlert.textContent.trim(), 'danger');
+            }
+
+            function showCustomAlert(message, type) {
+                const alertContainer = document.createElement('div');
+                alertContainer.className = `custom-alert alert alert-${type}`;
+                alertContainer.textContent = message;
+                document.body.appendChild(alertContainer);
+
+                setTimeout(function () {
+                    alertContainer.style.opacity = '0';
+                    setTimeout(function () {
+                        document.body.removeChild(alertContainer);
+                    }, 600);
+                }, 3000);
+            }
+        });
+    </script>
+
+    <style>
+        .custom-alert {
+            position: fixed;
+            top: 270px;
+            left: 50%;
+            font-size: 18px;
+            transform: translateX(-50%);
+            z-index: 1000;
+            padding: 10px;
+            border-radius: 5px;
+            color: #fff;
+            font-weight: bold;
+            opacity: 1;
+            transition: opacity 0.6s ease-in-out;
+        }
+
+            .custom-alert.alert-danger {
+                background-color: #dc3545;
+                border-color: #dc3545;
+            }
+    </style>
+
+</div>
